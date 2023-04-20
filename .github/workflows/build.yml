@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Get last commit message body
+      run: |
+      export COMMIT_MSG=$(git log -1 --pretty=%B)
+      echo "::set-env name=COMMIT_MSG::$COMMIT_MSG"
+    
     - name: Run Bash script
       run: |
         chmod +x build.sh
@@ -22,4 +27,25 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Python Files Archive
-        path: blend-a-med.zip
+        path: blend-a-med-*.zip
+
+     - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        body: |
+          $COMMIT_MSG
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: blend-a-med-*.zip
+        asset_name: blend-a-med.zip
+        asset_content_type: application/zip
