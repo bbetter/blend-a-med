@@ -3,7 +3,7 @@
 # Get current date and time
 now=$(date +"%Y-%m-%d_%H-%M-%S")
 
-rm -rf blend-a-med.zip
+rm -rf *.zip
 # Create a list of all .py files in the current directory
 py_files=$(ls *.py)
 

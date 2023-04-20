@@ -12,7 +12,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "BlendAMed",
+    "name" : "Blend-A-Med",
     "author" : "Andrii",
     "description" : "Blender exporter to popular formats",
     "blender" : (3, 5, 0),
