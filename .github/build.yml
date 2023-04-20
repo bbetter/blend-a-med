@@ -1,0 +1,30 @@
+name: Create Archive
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Run Bash script
+      run: |
+        chmod +x build.sh
+        ./build.sh
+
+    - name: Archive results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Python Files Archive
+        path: blend-a-med.zip
