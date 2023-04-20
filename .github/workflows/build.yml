@@ -15,8 +15,8 @@ jobs:
 
     - name: Get last commit message body
       run: |
-      export COMMIT_MSG=$(git log -1 --pretty=%B)
-      echo "::set-env name=COMMIT_MSG::$COMMIT_MSG"
+        export COMMIT_MSG=$(git log -1 --pretty=%B)
+        echo "::set-env name=COMMIT_MSG::$COMMIT_MSG"
     
     - name: Run Bash script
       run: |
@@ -29,16 +29,18 @@ jobs:
         name: Python Files Archive
         path: blend-a-med-*.zip
 
-     - name: Create Release
+    - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         body: |
           $COMMIT_MSG
-        draft: false
-        prerelease: false
+          draft: false
+          prerelease: false
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
