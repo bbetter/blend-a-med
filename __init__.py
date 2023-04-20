@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Andrii",
     "description" : "",
     "blender" : (3, 5, 0),
-    "version" : (0, 0, 2),
+    "version" : (0, 0, 1),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
