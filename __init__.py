@@ -14,7 +14,7 @@
 bl_info = {
     "name" : "BlendAMed",
     "author" : "Andrii",
-    "description" : "",
+    "description" : "Blender exporter to popular formats",
     "blender" : (3, 5, 0),
     "version" : (0, 0, 1),
     "location" : "",
