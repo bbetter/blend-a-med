@@ -13,9 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Get last commit message body
+    - name: Get environment ready
       run: |
         echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+        echo "now=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
     
     - name: Run Bash script
       run: |
@@ -23,10 +24,11 @@ jobs:
         ./build.sh
 
     - name: Archive results
+      id: archive_results
       uses: actions/upload-artifact@v2
       with:
-        name: Python Files Archive
-        path: blend-a-med-*.zip
+        name: Blend-A-Med (Blender Asset)
+        path: blend-a-med-${{env.now}}.zip
 
     - name: Create Release
       id: create_release
@@ -34,12 +36,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.now }}
         body: |
           "${{ env.commit_message }}"
-          draft: false
-          prerelease: false
+        draft: false
+        prerelease: false
+
+    - name: Run Bash script
+      run: |
+        ls -al
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -47,6 +52,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: blend-a-med-*.zip
+        asset_path: ./blend-a-med-${{ env.now }}.zip
         asset_name: blend-a-med.zip
         asset_content_type: application/zip
