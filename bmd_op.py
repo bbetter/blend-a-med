@@ -47,7 +47,7 @@ class BMD_OT_ExportObject(Operator):
                 print("NOT SUPPORTED TYPE")
 
             obj.select_set(False)
-            
+
         return {'FINISHED'}
 
 class BMD_OT_select_export_directory(bpy.types.Operator):
