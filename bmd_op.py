@@ -15,9 +15,15 @@ class BMD_OT_ExportObject(Operator):
     def execute(self, context):
         scene = context.scene
     
+        selected_objects = []
         for obj in scene.objects:
-            if obj.select_get() == False:
+            if obj.select_get() == True:
+                selected_objects.append(obj)
+                obj.select_set(False)
                 continue
+        
+        for obj in selected_objects:
+            obj.select_set(True)
 
             os.makedirs(os.path.join(self.export_directory, obj.name))
             filename = os.path.join(self.export_directory, obj.name , obj.name + "." + self.type.lower())
@@ -40,6 +46,8 @@ class BMD_OT_ExportObject(Operator):
             else:
                 print("NOT SUPPORTED TYPE")
 
+            obj.select_set(False)
+            
         return {'FINISHED'}
 
 class BMD_OT_select_export_directory(bpy.types.Operator):
