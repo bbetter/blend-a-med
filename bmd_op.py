@@ -25,8 +25,11 @@ class BMD_OT_ExportObject(Operator):
         for obj in selected_objects:
             obj.select_set(True)
 
-            os.makedirs(os.path.join(self.export_directory, obj.name))
-            filename = os.path.join(self.export_directory, obj.name , obj.name + "." + self.type.lower())
+            extension = self.type.lower()
+            os.makedirs(os.path.join(self.export_directory, obj.name + "_" + extension))
+            filename = os.path.join(self.export_directory, obj.name , obj.name + "." + extension)
+            if os.path.isfile(filename):
+                os.remove(filename)
 
             if self.type == "OBJ":
                 bpy.ops.export_scene.obj(
