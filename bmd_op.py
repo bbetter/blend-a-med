@@ -1,4 +1,5 @@
 
+from typing import Set
 import bpy
 import os
 
@@ -26,11 +27,18 @@ class BMD_OT_ExportObject(Operator):
             obj.select_set(True)
 
             extension = self.type.lower()
-            os.makedirs(os.path.join(self.export_directory, obj.name + "_" + extension))
-            filename = os.path.join(self.export_directory, obj.name , obj.name + "." + extension)
+            folder_name = obj.name + "_" + extension
+            os.makedirs(os.path.join(self.export_directory, folder_name), exist_ok = True)
+            filename = os.path.join(self.export_directory, folder_name, obj.name + "." + extension)
+            
+            self.report({'INFO'}, "==== BEGIN OBJECT {} ===".format(obj.name))
             if os.path.isfile(filename):
+                self.report({'INFO'}, "File: {} exists".format(filename))
+                self.report({'INFO'}, "Removing...")
                 os.remove(filename)
+                
 
+            self.report({'INFO'}, "Exporting into {} format".format(self.type))
             if self.type == "OBJ":
                 bpy.ops.export_scene.obj(
                     filepath=filename,
@@ -49,9 +57,25 @@ class BMD_OT_ExportObject(Operator):
             else:
                 print("NOT SUPPORTED TYPE")
 
+            self.report({'INFO'}, "==== END OBJ {} ===".format(obj.name))
             obj.select_set(False)
 
+            self.report({'INFO'}, "...")
+
+
+        self.report({'INFO'}, "Successfully completed export of {} objects".format(len(selected_objects)))
+
+        while selected_objects:
+            selected_objects.pop().select_set(True)
+
         return {'FINISHED'}
+    
+    def invoke(self, context, event) -> Set[str] | Set[int]:
+        print(event)
+        wm = context.window_manager
+        if event.shift:
+            return wm.invoke_confirm(self, event)
+        return self.execute(context)
 
 class BMD_OT_select_export_directory(bpy.types.Operator):
     bl_idname = "bmd.select_export_directory"
@@ -68,4 +92,21 @@ class BMD_OT_select_export_directory(bpy.types.Operator):
         wm = context.window_manager
         wm.fileselect_add(self)
         return {'RUNNING_MODAL'}
+
+# TODO: Use this as confirmation
+class BMD_OT_delete(bpy.types.Operator):
+    bl_idname = "bmd.delete_file"
+    bl_label = "File already exist. Delete?"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    filename: bpy.props.StringProperty()
+
+    def execute(self, context):
+        print("execute with "+ self.filename)
+      
+        return {'RUNNING_MODAL'}
+    
+    def invoke(self, context, event) -> Set[str] | Set[int]:
+        print("invoke with "+ self.filename)
+        return context.window_manager.invoke_confirm(self, event)
 

@@ -13,10 +13,10 @@
 
 bl_info = {
     "name" : "Blend-A-Med",
-    "author" : "Andrii",
+    "author" : "Andrii P",
     "description" : "Blender exporter to popular formats",
     "blender" : (3, 5, 0),
-    "version" : (0, 0, 2),
+    "version" : (1, 0, 0),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
@@ -29,11 +29,13 @@ import os
 from . bmd_panel import BMD_PT_Panel
 from . bmd_op import BMD_OT_ExportObject
 from . bmd_op import BMD_OT_select_export_directory
+from . bmd_op import BMD_OT_delete
 
 classes = (
     BMD_PT_Panel,
     BMD_OT_ExportObject,
-    BMD_OT_select_export_directory
+    BMD_OT_select_export_directory,
+    BMD_OT_delete
 )
 
 def register():

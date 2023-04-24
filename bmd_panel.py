@@ -16,6 +16,7 @@ class BMD_PT_Panel(Panel):
         # Add a property to hold the output directory path
         layout.prop(context.scene, "export_directory")
         column = layout.column()
+        column.label(text = "Beware!!! If file exists it will be automatically rewritten")
 
         ep1 = column.operator("bmd.export_objects", text="OBJ")
         ep1.type = "OBJ"
