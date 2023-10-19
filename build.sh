@@ -3,13 +3,20 @@
 # Get current date and time
 now=$(date +"%Y-%m-%d_%H-%M-%S")
 
-rm -rf *.zip
-# Create a list of all .py files in the current directory
-py_files=$(ls *.py)
+# Remove existing .zip files in the current directory
+rm -f *.zip
 
-# Create a new zip archive called "python_files.zip" and add each .py file to it
-zip blend-a-med-${now}.zip $py_files
+# Create a directory with the current timestamp
+mkdir blend-a-med
+
+# Move all .py files to the newly created directory
+cp -r *.py blend-a-med/
+
+# Create a new zip archive with the current timestamp in its name
+zip -r blend-a-med-${now}.zip blend-a-med/
+
+# Count the number of .py files moved to the archive
+num_files=$(find blend-a-med-${now}/ -type f -name '*.py' | wc -l)
 
 # Print a message indicating the number of files that were added to the archive
-num_files=$(echo $py_files | wc -w)
-echo "Added $num_files .py files to blend-a-med.zip"
+echo "Added $num_files .py files to blend-a-med-${now}.zip"
